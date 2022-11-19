@@ -1,8 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
-export default function SearchBar(props) {
+export default function SearchBar({ onSubmit }) {
   const [search, setSearch] = useState('');
 
   const handleInputChange = event => {
@@ -15,7 +16,7 @@ export default function SearchBar(props) {
       toast.error('Please, add the name! ');
       return;
     }
-    props.onSubmit(search);
+    onSubmit(search);
     // при submit формы мы вызываем метод onSubmit из App и передаю ему значение state from SearchBar таким образом state from SearchBar доходит до App во время сабмита формы
     setSearch('');
   };
@@ -40,7 +41,9 @@ export default function SearchBar(props) {
   );
 }
 
-// class SearchBar
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 // import React from 'react';
 // import toast from 'react-hot-toast';

@@ -1,5 +1,6 @@
 import React from 'react';
 import error from './error.jpg';
+import PropTypes from 'prop-types';
 
 export default class Error extends React.Component {
   render() {
@@ -11,3 +12,7 @@ export default class Error extends React.Component {
     );
   }
 }
+
+Error.propTypes = {
+  message: PropTypes.string.isRequired,
+};
