@@ -13,9 +13,9 @@ export default function ImageGallery({ images }) {
     console.log('showmodal');
     setShowModal(!showModal);
   };
-  const onClick = event => {
-    console.log(event);
-    setModalUrl(event.target.attributes.largeimg.value);
+  const onClick = image => {
+    console.log(image);
+    setModalUrl(image);
 
     toggleModal();
   };

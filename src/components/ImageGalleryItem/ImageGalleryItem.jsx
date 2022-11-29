@@ -13,7 +13,7 @@ export default class ImageGalleryItem extends React.Component {
           src={webformatURL}
           id={id}
           largeimg={largeImageURL}
-          onClick={this.props.onClick}
+          onClick={()=>this.props.onClick(largeImageURL)}
           alt="finding results"
         />
       </li>

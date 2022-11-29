@@ -13,7 +13,7 @@ const KEY = '27790361-d52fedb5b14fb71941e53259d';
 
 export default function App() {
   const [search, setSearch] = useState('');
-  const [images, setImages] = useState(null);
+  const [images, setImages] = useState([]);
   const [status, setStatus] = useState('idle');
   const [page, setPage] = useState(1);
 
@@ -25,33 +25,45 @@ export default function App() {
     console.log(search);
     setSearch(search);
     setPage(1);
+    setImages([]);
+  };
+  const getImages = images => {
+    return images.map(image => {
+      return {
+        id: image.id,
+        webformatURL: image.webformatURL,
+        largeImageURL: image.largeImageURL,
+      };
+    });
   };
 
   useEffect(() => {
     if (search === '') return;
     setStatus('pending');
 
-    fetch(
-      `https://pixabay.com/api/?q=${search}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-    )
-      .then(response => response.json())
-      .then(newImages => {
-        if (newImages && newImages.hits.length === 0) {
-          setStatus('rejected');
-        } else {
-          if (page === 1 || images === null) {
-            setImages(i => newImages.hits);
+    setTimeout(() => {
+      fetch(
+        `https://pixabay.com/api/?q=${search}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
+      )
+        .then(response => response.json())
+        .then(newImages => {
+          if (newImages && newImages.hits.length === 0) {
+            setStatus('rejected');
           } else {
-            console.log('load more ' + page);
-            setImages([...images, ...newImages.hits]);
+            if (page === 1 || images === null) {
+              setImages(i => getImages(newImages.hits));
+            } else {
+              console.log('load more ' + page);
+              setImages([...images, ...getImages(newImages.hits)]);
+            }
+            setStatus('resolved');
           }
-          setStatus('resolved');
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        setStatus('rejected');
-      });
+        })
+        .catch(error => {
+          console.log(error);
+          setStatus('rejected');
+        });
+    }, 3000);
     // eslint-disable-next-line
   }, [search, page]);
 
