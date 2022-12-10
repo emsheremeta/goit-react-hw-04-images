@@ -12,12 +12,14 @@ export default function Modal({ onClose, url }) {
   const handleKeyDown = e => {
     if (e.code === 'Escape') {
       onClose();
-      window.removeEventListener('keydown', handleKeyDown);
     }
   };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   });
 
   return (
